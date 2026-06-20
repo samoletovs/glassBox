@@ -40,8 +40,18 @@ jobs:
       - name: Type check
         run: npx tsc --noEmit
 
-      - name: Test
+      - name: BYO-tokens guard
+        run: npm run check:byo
+
+      - name: Test (frontend)
         run: npm test
+
+      - name: API build + test
+        run: |
+          cd api
+          npm ci
+          npm run build
+          npm test
 
   # ── Build & Deploy ─────────────────────────────────────────────────
   deploy:
@@ -62,10 +72,10 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_SWA_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: upload
-          app_location: "/"            # ← customize per project
-          api_location: "api"          # ← customize per project
-          output_location: "dist"      # ← customize per project
-          # api_build_command: "npm install && npm run build"  # ← uncomment if API needs separate build
+          app_location: "/"
+          api_location: "api"
+          output_location: "dist"
+          api_build_command: "npm install && npm run build"
 
       - name: Notify Telegram (success)
         if: success() && github.event_name == 'push'
