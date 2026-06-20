@@ -3,6 +3,29 @@
 > Golden path per [.github/PLATFORM.md](../../.github/PLATFORM.md). glassBox lands on the
 > **default** for all 7 platform decisions → ~30 min from scaffold to `https://glassbox.naurolabs.com`.
 
+## Deployment status (2026-06-21)
+
+**Phase 1 is LIVE** (behind Entra login) at
+**https://purple-grass-01f8aa203.7.azurestaticapps.net** — deployed via GitHub Actions from
+`samoletovs/glassBox` (master). Resource group `glassbox-rg`.
+
+- SWA Free `glassbox-swa` in **westeurope** (SWA isn't offered in northeurope).
+- Cosmos serverless `glassbox-cosmos-...` in **northeurope** (westeurope was capacity-constrained for
+  serverless on deploy day) — hence the separate `cosmosLocation` param in `main.bicep`.
+- Monitoring (Log Analytics + App Insights) via the shared module.
+- Cosmos creds live in SWA App Settings (`COSMOS_ENDPOINT/KEY/DB/CONTAINER`); CosmosStore verified
+  against the real account; board reset to empty.
+- Auth wall verified: `GET /` and `GET /api/state.json` both 302 → `/.auth/login/aad`.
+
+**Two manual follow-ups (need Sam):**
+1. **Lock to just me:** set `OWNER_EMAIL` app setting to my Microsoft account email
+   (`az staticwebapp appsettings set -n glassbox-swa -g glassbox-rg --setting-names OWNER_EMAIL=<email>`).
+   Until then, *any* Microsoft account that logs in can use the API.
+2. **Custom domain `glassbox.naurolabs.com`:** deferred — the Google Cloud DNS API wasn't enabled on
+   the active gcloud project and went interactive. Add the CNAME + `az staticwebapp hostname set` together.
+
+---
+
 ## The 7 decisions
 
 | # | Decision | glassBox choice | Notes |

@@ -6,6 +6,9 @@ param projectName string = 'glassbox'
 @description('Azure region')
 param location string = 'northeurope'
 
+@description('Azure region for Cosmos DB (separate because SWA-supported regions can be capacity-constrained for Cosmos serverless)')
+param cosmosLocation string = location
+
 @description('Custom domain (optional)')
 param customDomain string = ''
 
@@ -43,7 +46,7 @@ var cosmosAccountName = '${projectName}-cosmos-${uniqueString(resourceGroup().id
 
 resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2024-12-01-preview' = {
   name: cosmosAccountName
-  location: location
+  location: cosmosLocation
   tags: tags
   kind: 'GlobalDocumentDB'
   properties: {
@@ -53,7 +56,7 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2024-12-01-preview' = {
       defaultConsistencyLevel: 'Session'
     }
     locations: [
-      { locationName: location, failoverPriority: 0, isZoneRedundant: false }
+      { locationName: cosmosLocation, failoverPriority: 0, isZoneRedundant: false }
     ]
     publicNetworkAccess: 'Enabled'
     disableLocalAuth: false

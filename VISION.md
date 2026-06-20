@@ -115,4 +115,4 @@ making the a16z-vs-Shipper tension directly testable. See
 3. **Bridge (Phase 2)**: agent posts to ss.lv by co-driving its web form (Playwright MCP); I approve publish.
 4. **Monitor (Phase 3)** + **Inbox agent (Phase 4)**: price-drop proposals; drafted buyer replies I approve.
 5. **Trust layer** throughout: approval inbox + action log + rollback. **BYO-tokens** enforced (app ships no LLM).
-6. **Deploy** to `glassbox.naurolabs.com` (see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)); **score** the hypothesis; iterate or kill.
+6. **Deploy** — ✓ **Phase 1 live** (behind Entra login) at `purple-grass-01f8aa203.7.azurestaticapps.net`; custom domain `glassbox.naurolabs.com` pending DNS. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md). Next: score the hypothesis; iterate or kill.
