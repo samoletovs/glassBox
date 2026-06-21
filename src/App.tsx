@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { approveAction, fetchState, rejectAction } from './api';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ApiError, approveAction, fetchState, rejectAction } from './api';
 import type { BoardState } from './types';
 import { Board } from './components/Board';
 import { ApprovalInbox } from './components/ApprovalInbox';
@@ -7,6 +7,8 @@ import { ActionLog } from './components/ActionLog';
 import { Toast } from './components/Toast';
 
 const POLL_MS = 4000;
+// Don't flash a toast for a single hiccup — only surface after this many consecutive failures.
+const ERROR_THRESHOLD = 2;
 
 const EMPTY_STATE: BoardState = { items: [], pendingActions: [], log: [] };
 
@@ -14,18 +16,35 @@ export function App() {
   const [state, setState] = useState<BoardState>(EMPTY_STATE);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [authError, setAuthError] = useState(false);
+  const failuresRef = useRef(0);
+
+  const handleFailure = useCallback((err: unknown) => {
+    if (err instanceof ApiError && err.status === 401) {
+      // Auth lapsed or signed-in account isn't the owner — calm, persistent banner (no toast spam).
+      setAuthError(true);
+      setError(null);
+      return;
+    }
+    failuresRef.current += 1;
+    if (failuresRef.current >= ERROR_THRESHOLD) {
+      setError(err instanceof Error ? err.message : 'Something went wrong');
+    }
+  }, []);
 
   const refresh = useCallback(async () => {
     try {
       const next = await fetchState();
       setState(next);
       setError(null);
+      setAuthError(false);
+      failuresRef.current = 0;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load board');
+      handleFailure(err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [handleFailure]);
 
   useEffect(() => {
     void refresh();
@@ -39,10 +58,10 @@ export function App() {
         await approveAction(id);
         await refresh();
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Approve failed');
+        handleFailure(err);
       }
     },
-    [refresh],
+    [refresh, handleFailure],
   );
 
   const onReject = useCallback(
@@ -51,10 +70,10 @@ export function App() {
         await rejectAction(id);
         await refresh();
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Reject failed');
+        handleFailure(err);
       }
     },
-    [refresh],
+    [refresh, handleFailure],
   );
 
   return (
@@ -96,6 +115,27 @@ export function App() {
       </header>
 
       <main className="app__main" aria-busy={loading}>
+        {authError ? (
+          <section className="authbar" role="alert">
+            <div className="authbar__text">
+              <strong>Not authorized.</strong> Your session expired, or the account you're signed in
+              with isn't the owner. Check who you are at{' '}
+              <a href="/.auth/me" target="_blank" rel="noopener noreferrer">
+                /.auth/me
+              </a>
+              .
+            </div>
+            <div className="authbar__actions">
+              <a className="btn" href="/.auth/logout">
+                Sign out
+              </a>
+              <a className="btn btn--approve" href="/.auth/login/aad?post_login_redirect_uri=/">
+                Sign in as owner
+              </a>
+            </div>
+          </section>
+        ) : null}
+
         <ApprovalInbox
           actions={state.pendingActions}
           items={state.items}
@@ -106,7 +146,7 @@ export function App() {
         <ActionLog entries={state.log} />
       </main>
 
-      {error ? <Toast message={error} onDismiss={() => setError(null)} /> : null}
+      {error && !authError ? <Toast message={error} onDismiss={() => setError(null)} /> : null}
     </div>
   );
 }

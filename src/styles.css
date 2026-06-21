@@ -225,6 +225,38 @@ a:focus-visible {
   gap: 28px;
 }
 
+/* ---- Auth banner (401 / wrong account / expired session) ---- */
+.authbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: var(--warn-bg);
+  border: 1px solid var(--warn);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.authbar__text {
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.authbar__text a {
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+
+.authbar__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.authbar__actions .btn {
+  text-decoration: none;
+}
+
 /* ---- Approval inbox ---- */
 .inbox {
   background: var(--surface);
