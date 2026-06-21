@@ -479,6 +479,51 @@ a:focus-visible {
   font-style: italic;
 }
 
+/* ---- ss.lv "post it yourself" panel ---- */
+.sspanel {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sspanel__title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--accent-ink);
+}
+
+.sspanel__cat {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.sspanel__cat:hover {
+  text-decoration: underline;
+}
+
+.sspanel__copy {
+  align-self: flex-start;
+  font-size: 0.8rem;
+  padding: 5px 12px;
+}
+
+.sspanel__hint {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
 .card__link {
   font-size: 0.82rem;
   font-weight: 600;

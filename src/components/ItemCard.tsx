@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Item } from '../types';
+import { SsPostPanel } from './SsPostPanel';
 
 interface ItemCardProps {
   item: Item;
@@ -87,6 +88,8 @@ export function ItemCard({ item }: ItemCardProps) {
             <strong>Strategy:</strong> {strategy}
           </p>
         ) : null}
+
+        {status === 'drafted' ? <SsPostPanel item={item} /> : null}
 
         <footer className="card__footer">
           {ssUrl ? (

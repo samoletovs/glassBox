@@ -62,17 +62,22 @@ safely" is exactly the question glassBox exists to answer.
 - Treat ss.lv posting as **best-effort + verify**: after posting, the agent re-reads the live
   listing to confirm it matches the approved draft.
 
-> ⚠️ Open item: confirm ss.lv ToS stance on automation before Phase 2. If it forbids it, fall back
-> to "agent prepares a perfect draft + opens the pre-filled form for me to submit by hand" — still
-> a big time-saver, still on-thesis.
+> ✅ **Resolved 2026-06-21 (recon).** ss.lv's `robots.txt` **disallows the posting flow**
+> (`/lv/*/new-step-1/`, `/*/add-confirm/`, …) and the site returns an identical ~24 KB **generic
+> stub** to automated requests regardless of URL/user-agent — i.e. it **actively blocks bots**.
+> Decision: **glassBox does NOT scrape or auto-post to ss.lv.** Defeating their anti-bot would
+> violate their wishes (and our own rules). So everything ss.lv-side stays a **human action**:
+> glassBox prepares a copy-paste-ready listing + points me at the right category page; **I** post it.
+> Category browse pages are robots-allowed, but since reads are stubbed too, **price-checking is also
+> a manual browse** (me, in a real browser), not server-side scraping.
 
 ## Phases (each is ship-and-stop-able)
 
 | Phase | Scope | Proves |
 |---|---|---|
 | **1 — Cockpit + brain** | Board + price research + description/strategy, from VS Code. Output: approved draft (manual paste to post). | The board + BYO-tokens; the agent's research/drafting quality. |
-| **2 — Bridge to ss.lv** | Agent posts the approved listing by co-driving ss.lv (Playwright MCP); I approve publish. | The bridge on a real third-party site + the publish trust gate. |
-| **3 — Monitor & adjust** | Track views/position/staleness; agent proposes price drops. | Long-running agent value + the adjust loop. |
+| **2 — Prep for ss.lv** *(reframed)* | glassBox turns a drafted item into a copy-paste-ready ss.lv listing (LV/RU body + condition + price) and links me to the right category page. **I post it by hand** — no automation (ss.lv blocks bots). | Local listing-prep value + the human-post handoff. ✅ built. |
+| **3 — Monitor & adjust** | I paste the live ss.lv URL back; agent proposes price drops; I approve. | The adjust loop with a human reading the market. |
 | **4 — Inbox agent** | Watch buyer messages/email; draft replies; I approve sends. | The hardest trust case: negotiation with a human in the loop. |
 
 ## What we learn (scored against the VISION hypothesis)

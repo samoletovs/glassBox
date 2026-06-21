@@ -52,9 +52,25 @@ Do this:
 The agent fills the board; you open `localhost:5173`, read the draft, and (Phase 1) copy it to
 ss.lv yourself. When you ask the agent to "propose publishing", it calls
 `POST /api/items/{id}/actions {type:"publish"}` — which shows up in the **approval inbox** for you
-to approve. Approving (Phase 1) just records it as `listed`; **actually posting to ss.lv is Phase 2**
-(the agent co-drives the ss.lv form via Playwright MCP). See
-[SCENARIO-ss-lv.md](SCENARIO-ss-lv.md).
+to approve. Approving (Phase 1) just records it as `listed`; **the actual posting to ss.lv is done
+by you** — ss.lv blocks bots and disallows the post flow in robots.txt, so glassBox prepares the
+listing and you submit it. See [SCENARIO-ss-lv.md](SCENARIO-ss-lv.md).
+
+## Phase 2 — prepare for ss.lv, you post it
+
+ss.lv **cannot be automated** (robots.txt disallows the add-listing flow; the site returns a generic
+stub to bots). So glassBox does the prep and hands you a ready-to-post package:
+
+- For any **drafted** item, the card shows a **“Post it yourself on ss.lv”** panel with:
+  - a link to the correct **ss.lv category** page (open it → “Pievienot sludinājumu”),
+  - a **Copy listing text** button (Latvian body + condition + price, ready to paste),
+- You open the link, paste, add photos, set the price, and publish on ss.lv yourself.
+- Then paste the live ss.lv URL back (approve a `publish` action with `{ssUrl}`), and the item moves
+  to **listed** with the link.
+
+**Price-checking is also manual** (you browse comparable ss.lv listings in your real browser) —
+glassBox never scrapes ss.lv. The prep logic lives in [`src/ssPackage.ts`](../src/ssPackage.ts) and
+touches ss.lv zero times.
 
 ## Guardrails (already enforced)
 
