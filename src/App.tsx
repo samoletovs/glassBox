@@ -20,16 +20,16 @@ export function App() {
   const failuresRef = useRef(0);
 
   const handleFailure = useCallback((err: unknown) => {
+    failuresRef.current += 1;
+    // Ignore a single hiccup (e.g. a token refresh) — wait for it to persist.
+    if (failuresRef.current < ERROR_THRESHOLD) return;
     if (err instanceof ApiError && err.status === 401) {
-      // Auth lapsed or signed-in account isn't the owner — calm, persistent banner (no toast spam).
+      // Persistent 401 → session expired or signed-in account isn't the owner.
       setAuthError(true);
       setError(null);
       return;
     }
-    failuresRef.current += 1;
-    if (failuresRef.current >= ERROR_THRESHOLD) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
-    }
+    setError(err instanceof Error ? err.message : 'Something went wrong');
   }, []);
 
   const refresh = useCallback(async () => {
