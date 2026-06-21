@@ -20,9 +20,14 @@
 **Two manual follow-ups (need Sam):**
 1. **Lock to just me:** set `OWNER_EMAIL` app setting to my Microsoft account email
    (`az staticwebapp appsettings set -n glassbox-swa -g glassbox-rg --setting-names OWNER_EMAIL=<email>`).
-   Until then, *any* Microsoft account that logs in can use the API.
-2. **Custom domain `glassbox.naurolabs.com`:** deferred — the Google Cloud DNS API wasn't enabled on
-   the active gcloud project and went interactive. Add the CNAME + `az staticwebapp hostname set` together.
+   Until then, *any* Microsoft account that logs in can use the API. **Not auto-set on purpose** —
+   guessing the wrong email would lock me out, so this one waits for me. (Tip: if unsure of the exact
+   value, log in once and read `userDetails` from `https://glassbox.naurolabs.com/.auth/me`.)
+2. **Custom domain `glassbox.naurolabs.com`:** ✅ **wired** — CNAME added in the `naurolabs` zone
+   (gcloud project `era-erp`) → SWA hostname binding submitted. Status was `Validating` at hand-off;
+   SWA issues the free cert and flips to `Ready` automatically within ~15 min–1 hr. Verify:
+   `az staticwebapp hostname show -n glassbox-swa -g glassbox-rg --hostname glassbox.naurolabs.com --query status -o tsv`
+   then open https://glassbox.naurolabs.com. Registered in the manifest + WORKSPACE DNS table.
 
 ---
 
