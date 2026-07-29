@@ -5,6 +5,7 @@ import { Board } from './components/Board';
 import { ApprovalInbox } from './components/ApprovalInbox';
 import { ActionLog } from './components/ActionLog';
 import { Toast } from './components/Toast';
+import { buildOwnerSwitchUrl } from './authUrls';
 
 const POLL_MS = 4000;
 // Don't flash a toast for a single hiccup — only surface after this many consecutive failures.
@@ -129,8 +130,11 @@ export function App() {
               <a className="btn" href="/.auth/logout">
                 Sign out
               </a>
-              <a className="btn btn--approve" href="/.auth/login/aad?post_login_redirect_uri=/">
-                Sign in as owner
+              <a
+                className="btn btn--approve"
+                href={buildOwnerSwitchUrl(window.location.origin)}
+              >
+                Switch to owner account
               </a>
             </div>
           </section>
