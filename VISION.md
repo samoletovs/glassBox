@@ -6,7 +6,7 @@
 > and a fully headless MCP future.
 >
 > **Status:** vision / pre-MVP · **First filed:** 2026-06-21 · **Type:** research experiment
-> **Origin:** [mindVault → 02_areas/agents/agent-native-saas.md](https://github.com/samoletovs/mindVault)
+> **Origin:** [mindVault → areas/agents/agent-native-saas.md](https://github.com/samoletovs/mindVault)
 > (Dan Shipper / Every on Lenny's Podcast, 2026) — the "browser-inside-the-agent, bring-your-own-tokens" idea.
 
 ---
