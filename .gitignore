@@ -10,3 +10,6 @@ coverage/
 .playwright-mcp/
 playwright-report/
 test-results/
+
+# Local-only personal-info pattern overrides
+scripts/.leak-patterns.local.txt
