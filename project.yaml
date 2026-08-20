@@ -1,0 +1,17 @@
+name: glassBox
+purpose: "A thin web GUI a human and an external coding agent operate on the same live surface — BYO tokens, no embedded LLM. Tests what a UI looks like when its primary reader is an agent"
+users: "A developer working alongside a headless coding agent that needs a shared visual surface"
+stage: research
+goals:
+  - "Agent-legible UI — structure a model can read and act on, not just pixels a human can"
+  - "Bring-your-own tokens; no embedded LLM and no keys held by the app"
+  - "Bridge today's GUIs and headless MCP rather than replacing either"
+  - "Stay thin enough that the agent, not the frontend, holds the logic"
+similar:
+  - "MCP Inspector (protocol-level agent tooling)"
+  - "Open Interpreter / computer-use agents"
+  - "Jupyter (a shared human/machine surface, but human-first)"
+quality:
+  - tests
+  - ci-cd
+  - responsive
