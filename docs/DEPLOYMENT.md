@@ -17,7 +17,7 @@
   against the real account; board reset to empty.
 - Auth wall verified: `GET /` and `GET /api/state.json` both 302 → `/.auth/login/aad`.
 
-**Two manual follow-ups (need Sam):**
+**Two manual follow-ups (need the repository owner):**
 1. **Lock to just me:** set `OWNER_EMAIL` app setting to my Microsoft account email
    (`az staticwebapp appsettings set -n glassbox-swa -g glassbox-rg --setting-names OWNER_EMAIL=<email>`).
    Until then, *any* Microsoft account that logs in can use the API. **Not auto-set on purpose** —
@@ -98,12 +98,6 @@ a connection string in App Settings only if RBAC-from-SWA-Functions proves painf
 az staticwebapp hostname set -n glassbox-swa -g glassbox-rg --hostname glassbox.naurolabs.com
 ```
 
-**5. GitHub repo** (deferred — not yet created)
-```powershell
-pwsh .github/scripts/new-project.ps1 ...   # already run with -SkipGithub
-# when ready:  gh repo create samoletovs/glassBox --private --source glassBox --push
-```
-
 ## Deploy checklist
 
 - [ ] Add Cosmos (serverless, AAD-only) + `actions` container to `main.bicep`.
@@ -114,4 +108,4 @@ pwsh .github/scripts/new-project.ps1 ...   # already run with -SkipGithub
 - [ ] CI secret `AZURE_STATIC_WEB_APPS_API_TOKEN`; workflow green.
 - [ ] CNAME + `hostname set`; HTTPS live on `glassbox.naurolabs.com`.
 - [ ] BYO-tokens CI guard passes (no AI SDK in the app).
-- [ ] Create + push GitHub repo; register domain in DNS zone file.
+- [ ] Register the domain in the DNS zone file.
