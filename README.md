@@ -44,6 +44,12 @@ npm test
 npm run build
 ```
 
+CI runs lint, type checking, the BYO-tokens guard, frontend build/tests and API
+build/tests on every open PR. Dependabot and fork PRs do not upload or close
+Azure preview environments, even when a maintainer reruns them. Trusted
+same-repository PRs retain previews; pushes to `main`/`master` deploy only after
+quality succeeds. Missing deployment secrets on an eligible run still fail.
+
 ## Status
 
 **Research prototype.** The current phase is deployed behind Microsoft Entra ID

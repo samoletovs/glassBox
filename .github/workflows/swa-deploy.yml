@@ -46,6 +46,9 @@ jobs:
       - name: Test (frontend)
         run: npm test
 
+      - name: Build (frontend)
+        run: npm run build
+
       - name: API build + test
         run: |
           cd api
@@ -56,7 +59,13 @@ jobs:
   # ── Build & Deploy ─────────────────────────────────────────────────
   deploy:
     needs: quality
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    # Dependabot and fork PRs validate without deployment secrets, including human reruns.
+    if: >-
+      github.actor != 'dependabot[bot]' &&
+      (github.event_name == 'push' ||
+       (github.event_name == 'pull_request' && github.event.action != 'closed' &&
+        github.event.pull_request.user.login != 'dependabot[bot]' &&
+        github.event.pull_request.head.repo.full_name == github.repository))
     runs-on: ubuntu-latest
     name: Build and Deploy
     steps:
@@ -115,7 +124,11 @@ jobs:
 
   # ── Close PR preview ───────────────────────────────────────────────
   close_pull_request:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: >-
+      github.event_name == 'pull_request' && github.event.action == 'closed' &&
+      github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - name: Close Pull Request
